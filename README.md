@@ -1,66 +1,56 @@
-## Foundry
+# 🔄 Kiriswap
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+**Kiriswap** is a decentralized exchange (DEX) implementation that replicates the **Uniswap V1 algorithm**, built from scratch using Solidity. This project serves as an foundational base for understanding how automated market makers (AMMs) work, focusing on liquidity pools, LP tokens, and token swapping without order books.
 
-Foundry consists of:
+---
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## 🚀 Features
 
-## Documentation
+- ✅ **ERC20 <> ETH Swaps**
+- ✅ **Liquidity Provisioning**
+- ✅ **Liquidity Removal with LP Tokens**
+- ✅ **Token <> Token Swaps** via ETH as intermediate
+- ✅ **Factory Contract** to manage Exchange deployment
+- ✅ Built using **Foundry** for testing and development
 
-https://book.getfoundry.sh/
+---
 
-## Usage
+## 📦 Contracts
 
-### Build
+### 1. `MockToken.sol`
+A minimal ERC20 token used for testing swap functionality.
 
-```shell
-$ forge build
-```
+### 2. `Exchange.sol`
+Core logic for:
+- Adding/removing liquidity
+- ETH-to-Token swaps
+- Token-to-ETH swaps
+- Token-to-Token swaps (via intermediate ETH)
+- Minting and burning LP tokens
 
-### Test
+> Each ERC20 token has its own `Exchange` contract.
 
-```shell
-$ forge test
-```
+### 3. `Factory.sol`
+- Creates and stores unique `Exchange` contracts for each ERC20 token.
+- Prevents duplicate exchanges.
+- Acts as the central registry.
 
-### Format
+---
 
-```shell
-$ forge fmt
-```
+## 🔄 How Token-to-Token Swap Works
 
-### Gas Snapshots
+1. User calls `tokenToTokenSwap(_tokensSold, _minTokensBought, _tokenAddress)`
+2. Tokens are swapped to ETH in the source `Exchange`.
+3. ETH is forwarded to the target token's `Exchange`.
+4. Target `Exchange` executes `ethToTokenTransfer` to send the output tokens **directly to the user**, saving gas.
 
-```shell
-$ forge snapshot
-```
 
-### Anvil
+## 📚 Concepts Covered
 
-```shell
-$ anvil
-```
+- ✅ Constant Product Formula `x * y = k`
+- ✅ LP token mint/burn math
+- ✅ Factory + Exchange architecture
+- ✅ `msg.sender` context during factory deployment
+- ✅ Gas-optimized token transfer routing
 
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+---
