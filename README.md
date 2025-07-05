@@ -45,7 +45,7 @@ Core logic for:
 4. Target `Exchange` executes `ethToTokenTransfer` to send the output tokens **directly to the user**, saving gas.
 
 
-## 📚 Concepts Covered
+## 📚 Concepts Used
 
 - ✅ Constant Product Formula `x * y = k`
 - ✅ LP token mint/burn math
